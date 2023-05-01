@@ -49,7 +49,9 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
-            if (user == null) return Unauthorized("invalid username");
+            
+            if (user == null) 
+            return Unauthorized("invalid username");
 
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -57,7 +59,8 @@ namespace API.Controllers
 
             for (int i = 0; i < computedHash.Length; i++)
             {
-                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("invalid password");
+                if (computedHash[i] != user.PasswordHash[i]) 
+                return Unauthorized("invalid password");
             }
 
             return new UserDto
